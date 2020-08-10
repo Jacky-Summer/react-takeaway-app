@@ -7,5 +7,6 @@ import Main from './Main'
 ReactDom.render(
   <Provider store={store}>
     <Main />
-  </Provider>
+  </Provider>,
+  document.getElementById('root')
 )

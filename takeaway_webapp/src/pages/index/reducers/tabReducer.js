@@ -1,5 +1,5 @@
 import { CHANGE_TAB } from '../actions/actionTypes'
-import { TABKEY } from '../../config'
+import { TABKEY } from '../config'
 const initState = {
   tabs: [
     {
@@ -15,7 +15,7 @@ const initState = {
       name: '我的',
     },
   ],
-  activeKey: TABKEY.home,
+  activeKey: TABKEY.order,
 }
 
 const tabReducer = (state = initState, action) => {

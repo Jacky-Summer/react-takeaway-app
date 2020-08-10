@@ -6,7 +6,8 @@ import './BottomBar.scss'
 
 const BottomBar = props => {
   const changeTab = tabKey => {
-    props.changeTab(tabKey)
+    // props.changeTab(tabKey)
+    props.history.replace(tabKey)
   }
 
   const renderItems = () => {
@@ -18,6 +19,7 @@ const BottomBar = props => {
           key={tab.key}
           to={`/${tab.key}`}
           className={cls}
+          replace={true}
           activeClassName='active'
           onClick={() => changeTab(tab.key)}
         >
