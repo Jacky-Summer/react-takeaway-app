@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { TABKEY } from '../config'
-import { changeTab, getFilterData } from '../actions/headerAction'
+import { changeTab, getFilterData, changeFilter } from '../actions/headerAction'
 import './Header.scss'
 
-const Header = ({ tabs, activeKey, filterData, changeTab, getFilterData }) => {
+const Header = ({
+  tabs,
+  activeKey,
+  filterData,
+  changeTab,
+  getFilterData,
+  changeFilter,
+}) => {
   const [isShowPanel, setIsShowPanel] = useState(false)
   useEffect(() => {
     getFilterData()
@@ -43,9 +50,34 @@ const Header = ({ tabs, activeKey, filterData, changeTab, getFilterData }) => {
     }
     return tabArr
   }
+  // 重置其他item的active状态
+  const revertActive = (key, dataList) => {
+    if (key === TABKEY.cate) {
+      for (let i = 0; i < dataList.length; i++) {
+        for (let j = 0; j < dataList[i].sub_category_list.length; j++) {
+          dataList[i].sub_category_list[j].active = false
+        }
+      }
+    } else if (key === TABKEY.type) {
+      for (let i = 0; i < dataList.length; i++) {
+        dataList[i].active = false
+      }
+    } else {
+      for (let i = 0; i < dataList.length; i++) {
+        for(let j = 0; j < dataList[i].items.length; j++) {
+          dataList[i].items[j].active = false
+        }
+      }
+    }
+  }
 
   // 变化当前点击的item状态 同时发起filter的请求
-  const changeDoFilter = () => {}
+  const changeDoFilter = (item, key, dataList) => {
+    revertActive(key, dataList)
+    item.active = true
+    changeFilter({ item, key })
+    setIsShowPanel(false)
+  }
 
   // 全部分类里面的每个条目
   const renderCateInnerContent = (item, cateList) => {
@@ -186,5 +218,5 @@ export default connect(
     activeKey: state.header.activeKey,
     filterData: state.header.filterData,
   }),
-  { changeTab, getFilterData }
+  { changeTab, getFilterData, changeFilter }
 )(Header)
